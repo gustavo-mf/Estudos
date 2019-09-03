@@ -43,36 +43,61 @@ function obterEndereco(idUser, callback) {
   });
 }
 
-const userPromise = obterUsuario();
-//Para sucesso .then
-//erros .catch
-// usuario -> telefone -> endereco
-userPromise.then((user) =>{
-  return obterTelefone(user.id).then((telefone) => {
-    return {
-      usuario: {
-        nome: user.nome,
-        id: user.id
-      },
-      telefone: telefone
-    };
-  });
-}).then((result) =>{
-  return endereco = obterEndereco(result.usuario.id).then((endereco) => {
-    return {
-      usuario: result.usuario,
-      telefone: result.telefone,
-      endereco: endereco
-    };
-  });
-}).then((result) =>{
-  //console.log('Resultado', result);
-  console.log(`Nome: ${result.usuario.nome},
-  Endereco: ${result.endereco.rua}, Numero: ${result.endereco.numero}
-  Telefone: (${result.telefone.ddd}) ${result.telefone.telefone}`);
-}).catch((error) => {
-  console.error('Deu ruim', error)
-});
+//1 - passo adicionar asyn na chamada 
+main();
+async function main() {
+  try {
+    console.time('medida-promise');
+    const usuario = await obterUsuario();
+    //const telefone = await obterTelefone(usuario.id);
+    //const endereco = await obterEndereco(usuario.id);
+    //executar ao mesmo tempo, melhorando a performace
+    const resultado = await Promise.all([
+      obterTelefone(usuario.id),
+      obterEndereco(usuario.id)
+    ]);
+
+    const telefone = resultado[0];
+    const endereco = resultado[1];
+    console.log(`Nome: ${usuario.nome},
+    Endereco: ${endereco.rua}, Numero: ${endereco.numero}
+    Telefone: (${telefone.ddd}) ${telefone.telefone}`);
+    console.timeEnd('medida-promise');
+  } catch(error) {
+    console.error('Deu ruim', error)
+  }
+}
+
+// const userPromise = obterUsuario();
+// //Para sucesso .then
+// //erros .catch
+// // usuario -> telefone -> endereco
+// userPromise.then((user) =>{
+//   return obterTelefone(user.id).then((telefone) => {
+//     return {
+//       usuario: {
+//         nome: user.nome,
+//         id: user.id
+//       },
+//       telefone: telefone
+//     };
+//   });
+// }).then((result) =>{
+//   return endereco = obterEndereco(result.usuario.id).then((endereco) => {
+//     return {
+//       usuario: result.usuario,
+//       telefone: result.telefone,
+//       endereco: endereco
+//     };
+//   });
+// }).then((result) =>{
+//   //console.log('Resultado', result);
+//   console.log(`Nome: ${result.usuario.nome},
+//   Endereco: ${result.endereco.rua}, Numero: ${result.endereco.numero}
+//   Telefone: (${result.telefone.ddd}) ${result.telefone.telefone}`);
+// }).catch((error) => {
+//   console.error('Deu ruim', error)
+// });
 
 // obterUsuario((erro, user) => {
 //   // null || "" || 0 === false
