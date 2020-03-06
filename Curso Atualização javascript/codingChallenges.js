@@ -27,3 +27,60 @@ else if(markTeamAverage > johnTeamAverage && markTeamAverage > maryTeamAverage)
   console.log('Mark\'s team is the winner ', markTeamAverage);
 else
   console.log('Mary\' team is the winner ', markTeamAverage);
+
+//Coding challenge - 3
+function tipCalculator(bill) {
+  if(bill < 50) return bill * 0.2;
+  else if(bill >= 50 && bill <= 200) return bill * 0.15;
+  else return bill * 0.10;
+}
+
+var i, tip, tips = [], bills = [124, 48, 268], finalBills = [];
+
+for(i = 0; i < 3; i++) {
+  tip = tipCalculator(bills[i]);
+  tips.push(tip);
+  finalBills.push(bills[i] + tip);
+  console.log('bill: ' + bills[i] + ' tip: ' + tip + ' final bill: ' + finalBills[i]);
+}
+
+//Coding challenge - 4
+var mark = {
+  name: 'Mark',
+  mass: 92,
+  height: 1.74,
+  BMI: 0,
+  calcBMI: function() {
+    this.BMI = this.mass / Math.pow(this.height, 2);
+  },
+  toString: function() {
+    return 'Name: ' + this.name 
+    + ' height: ' + this.height 
+    + ' mass: ' + this.mass 
+    + ' BMI: ' + this.BMI;
+  }
+};
+
+var john = {
+  name: 'John',
+  mass: 61,
+  height: 1.54,
+  BMI: 0,
+  calcBMI: function() {
+    this.BMI = this.mass / Math.pow(this.height, 2);
+  },
+  toString: function() {
+    return 'Name: ' + this.name 
+    + ' height: ' + this.height 
+    + ' mass: ' + this.mass 
+    + ' BMI: ' + this.BMI;
+  }
+};
+
+mark.calcBMI();
+john.calcBMI();
+
+if(mark.BMI > john.BMI)  
+  console.log(mark.toString());
+else
+  console.log(john.toString());
